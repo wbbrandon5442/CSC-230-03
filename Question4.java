@@ -127,12 +127,30 @@ public class Question4 {
         return false;
     }
 
-    /* This method checks for a diagonal sequence of letters alphabetically */
+    /* This method checks for a diagonal sequence of letters alphabetically starting from the right side */
     
-     public static boolean checkDiagonal(char[][] newArray, int row, int col){
+     public static boolean checkDiagonalRight(char[][] newArray, int row, int col){
             for (int i = 3; i < newArray.length - 4; i++) {
             int sequence = 0; 
                 for (int j = 0; j < newArray[0].length - 4; j++) {
+               for (int k = 1; k <= 4; k++) {
+                if (newArray[i][j] == (newArray[i + k][j + k] + 1)) {
+                    sequence++;
+                    if (sequence == 4) return true;
+                } else {
+                    sequence = 0;
+                }
+              }
+            }
+        }
+        return false;  
+    }
+
+    /* This method checks for a diagonal sequence of letters alphabetically starting from the left side */
+     public static boolean checkDiagonalLeft(char[][] newArray, int row, int col){
+            for (int i = newArray.length - 4; i > 3; i--) {
+            int sequence = 0; 
+                for (int j = newArray[0].length - 4; j > 0; j--) {
                for (int k = 1; k <= 4; k++) {
                 if (newArray[i][j] == (newArray[i + k][j + k] + 1)) {
                     sequence++;
