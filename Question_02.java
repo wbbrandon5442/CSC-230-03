@@ -1,99 +1,101 @@
-package question_02;
-import java.util.Scanner;
-import java.util.Random; 
+package question_.pkg02;
+
 /*
-Name: William Brandon
-Class: CSC 230-03
-Date: 9-8-2023
+*Name: William Brandon
+*Class: CSC 230-03
+*Date: 9-17-2023
+*Assignment #3
 */
 
 /*
-Goal: As we know Java arrays are not dynamically expandable at run time.
-Write a Java program to read unlimited number of integers from console (each is separated
-by the carriage return-i.e. your “enter key”), store them in an array of integers and print
-them. Program should terminate after you input a zero. You may need to have the
-following methods in your program.
+*Goal: Write a method to return the “second maximum” of an integer array.
+*You should start with pseudo code.
 */
 /**
  * Class for Question #2
  * @author William Brandon
  */
+
 public class Question_02 {
-    public static Scanner keyboard = new Scanner(System.in);
-    public static Random rand = new Random();
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int newArray [] = getInts(); 
-        for(int i: newArray){  
-            System.out.print(i+" ");  
-        }  
-        System.out.println();
-        System.out.println("Final array size is: " + newArray.length);
+         int [] a1 = {1}; //test case for array with 1 element
+        int [] a2 = {1, 1}; //test case for array with 2 of the same elements
+        int [] a3 = {1, 1, 1, 1, 1, 1, 1}; // test case for array where every element is the same
+        int [] a4 = {2, 1};
+        int [] a5 = {3, 2, 1}; //test case for descending order
+        int [] a6 = {1, 2, 3}; //test case for ascending order
+        int [] a7 = {1, 2, 3, 4, 1, 10};
+        int [] a8 = {14, 12, 8, 3, 2, 9, 6, 17}; //test case where first index is second max and last index is the max
+        int [] a9 = {24, 13, 19, 7, 2, 6, 16, 3}; //test case where first index is the max
+        int [] a10 = {10, 11, 11, 11, 11, 11, 11, 11}; //test case where first index is second max and the following elements are the max
+        int [] a11 = {31, 13, 17, 24, 18, 13, 29}; //test case where first index is max and last index is second max
+        //int secondMax;
+        
+            try {
+                System.out.println(secondMax(a1));
+           } catch (Exception e) {
+               System.out.println(e.toString()); //testing first array for array size less than 2
+           }
+       
+           try {
+               System.out.println(secondMax(a2));
+           } catch (Exception e) {
+                System.out.println(e.toString()); //testing second array for same elements
+           }
+           
+           try {
+               System.out.println(secondMax(a3)); //testing third array for same elements
+           } catch (Exception e) {
+                System.out.println(e.toString());
+           }
+           
+        System.out.println("Second Max Element of Array a4: " + secondMax(a4));
+        
+        System.out.println("Second Max Element of Array a5: " + secondMax(a5));
+        
+        System.out.println("Second Max Element of Array a6: " + secondMax(a6));
+        
+        System.out.println("Second Max Element of Array a7: " + secondMax(a7));
+        
+        System.out.println("Second Max Element of Array a8: " + secondMax(a8));
+        
+        System.out.println("Second Max Element of Array a9: " + secondMax(a9));
+        
+        System.out.println("Second Max Element of Array a10: " + secondMax(a10));
+        
+        System.out.println("Second Max Element of Array a11: " + secondMax(a11));
     }
     
-    /**
-     * adds elements to an array and reads
-     * an unlimited number of integers for an array
-     * @return finalArray
-     */
-    public static int[] getInts() {
-        int[] myArray = new int[2];
-        int newSize = myArray.length; 
-        String userInput = " ";
-        int i = 1; //Setting i = 1 instead of 0 so it can keep pace with the Array.length
-        int numberInput = 1;
-        System.out.println("Press 'enter' to add an element [enter 0 to terminate program]: "); 
-        userInput = keyboard.nextLine(); 
-        
-        while (numberInput != 0) {
-        
-        int randomNumber = rand.nextInt(1000); 
-        myArray[i - 1] = randomNumber; //Because i starts with the value 1 I need to subtract by 1 for the first index of 0 
-            if (i == myArray.length) {
-                myArray = resize(myArray, newSize); 
-                newSize = myArray.length; 
+    public static int secondMax(int[] newArray) {
+        int maxElement = newArray[0]; //Initializing maxElement to first index
+        int secondMax = newArray[newArray.length - 1]; //Initializing secondMax to the last index
+        int sameNumber = 1; //same number counts the number of matches in the array and must equal the array length for argument to be thrown
+        if (newArray.length < 2) {
+            throw new IllegalArgumentException("No second max for arrays of size less than 2!!!"); //Throws argument when array is less than 2
+        }
+        for (int i = 0; i < newArray.length; ++i) {
+            if (newArray[i] > maxElement) {
+                secondMax = maxElement; //sets secondMax to previous max
+                maxElement = newArray[i]; //sets maxElement to new max
             }
-        System.out.println("Press 'enter' to add an element [enter 0 to terminate program]: ");
-        userInput = keyboard.nextLine(); 
-        if (userInput.matches("0")) {
-            numberInput = 0; // if userInput equals the string of "0" it converts that into the Integer 0 activating the sentinal value for exiting the loop
-            ++i;
-            break;
-        }
-        while (userInput != "") {
-            System.out.println("Error must press 'enter' to add element."); // User is stuck in a loop until they comply with the message
-            userInput = keyboard.nextLine();
-        }
-        ++i;
-        }
-        
-        int finalArraySize = i -1; //
-        int[] finalArray = new int[finalArraySize]; //The final Array Size is the last increment of i - 1
-            for (int j = 0; j < finalArraySize; j++) {
-                finalArray[j] = myArray[j];
+            else if (newArray[i] > secondMax && newArray[i] != maxElement) {
+                secondMax = newArray[i]; //element must not equal maxElement and be greater than previous second max for statement to initialize
             }
-        
-        return finalArray;  
-    }
-    
-    /**
-     * @param newArray
-     * @param newSize
-     * resizes the array before the inputs are able to go out of bounds
-     * @return newArray
-     */
-    private static int[] resize(int[] newArray, int newSize) {
-         int [] resizedArray = new int[newSize * 2];
-         for (int i = 0; i < newArray.length; ++i) {
-             resizedArray[i] = newArray[i];
-         } 
-         newArray = resizedArray; 
-         System.out.println("New array size equals " + newArray.length); 
-         System.out.println();
-         return newArray; 
+           
+            if ((i + 1) < newArray.length) {
+            if (newArray[i + 1] == newArray[i]) {
+                sameNumber++; //counts the number of elements that are the same
+                if (sameNumber == newArray.length) {
+                    throw new IllegalArgumentException(" The array has the same elements. No second maximum!!!!!"); //throws argument if all elements are the same
+                }
+            }
+            }
         }
+        
+        return secondMax;
     }
-    
-
+}
